@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 패널 - Ideaoasis.co.kr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .login-panel, .admin-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+            border: 1px solid rgba(0, 123, 255, 0.1);
+        }
+
+        .login-panel {
+            max-width: 400px;
+            margin: 100px auto;
+            text-align: center;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #007bff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #007bff;
+            margin: 30px 0 20px 0;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], 
+        input[type="number"], 
+        input[type="password"],
+        textarea, 
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .textarea-large {
+            min-height: 150px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #495057;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .ideas-list {
+            margin-top: 30px;
+        }
+
+        .idea-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .idea-info h3 {
+            color: #007bff;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .idea-info p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .idea-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .idea-actions button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #495057;
+        }
+
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .scoring-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .idea-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .idea-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Panel -->
+        <div id="login-panel" class="login-panel">
+            <h1>🔐 관리자 로그인</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">로그인</button>
+            </form>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="admin-panel" class="admin-panel">
+            <div class="nav-links">
+                <a href="index.html">🏠 홈페이지</a>
+                <a href="archive.html">📚 아카이브</a>
+                <button onclick="logout()" class="btn-danger">로그아웃</button>
+            </div>
+
+            <h1>📊 아이디어 오아시스 관리자 패널</h1>
+
+            <div id="alert-container"></div>
+
+            <!-- Add New Idea Form -->
+            <form id="idea-form">
+                <h2>새 아이디어 추가</h2>
+
+                <!-- Basic Information -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="idea">아이디어 이름 *</label>
+                        <input type="text" id="idea" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">카테고리</label>
+                        <select id="category">
+                            <option value="AI/Tech">AI/기술</option>
+                            <option value="Healthcare">헬스케어</option>
+                            <option value="E-commerce">이커머스</option>
+                            <option value="Finance">금융</option>
+                            <option value="Education">교육</option>
+                            <option value="Beauty">뷰티</option>
+                            <option value="Food">음식</option>
+                            <option value="Real Estate">부동산</option>
+                            <option value="Entertainment">엔터테인먼트</option>
+                            <option value="Other">기타</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="desc">간단 설명 *</label>
+                    <textarea id="desc" required placeholder="한 줄로 요약한 아이디어 설명"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="detailed_desc">상세 설명 *</label>
+                    <textarea id="detailed_desc" class="textarea-large" required placeholder="아이디어의 상세한 설명, 문제점, 해결방안 등"></textarea>
+                </div>
+
+                <!-- Market Information -->
+                <h2>시장 정보</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="source">출처 *</label>
+                        <input type="text" id="source" required placeholder="예: Product Hunt (July 26 2025)">
+                    </div>
+                    <div class="form-group">
+                        <label for="size">시장 규모 *</label>
+                        <input type="text" id="size" required placeholder="예: ₩10.5T">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="target_market">타겟 시장</label>
+                    <textarea id="target_market" placeholder="주요 타겟 고객층과 시장 세그먼트"></textarea>
+                </div>
+
+                <!-- Scoring Metrics -->
+                <h2>평가 지표</h2>
+                <div class="scoring-grid">
+                    <div class="form-group">
+                        <label for="comp">경쟁 강도 (1-10) *</label>
+                        <input type="number" id="comp" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="diff">구현 난이도 (1-10) *</label>
+                        <input type="number" id="diff" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opportunity">기회 점수 (1-10)</label>
+                        <input type="number" id="opportunity" min="1" max="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="timing">타이밍 점수 (1-10)</label>
+                        <input type="number" id="timing" min="1" max="10">
+                    </div>
+                </div>
+
+                <!-- Business Model -->
+                <h2>비즈니스 모델</h2>
+                <div class="form-group">
+                    <label for="fit">한국 시장 적합성 *</label>
+                    <textarea id="fit" required placeholder="한국 시장에서의 적합성과 특별한 고려사항"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="revenue_model">수익 모델</label>
+                    <textarea id="revenue_model" placeholder="어떻게 수익을 창출할 것인가?"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="initial_investment">초기 투자금</label>
+                        <input type="text" id="initial_investment" placeholder="예: ₩500만 - ₩2,000만">
+                    </div>
+                    <div class="form-group">
+                        <label for="revenue_potential">연간 수익 잠재력</label>
+                        <input type="text" id="revenue_potential" placeholder="예: ₩5억 - ₩50억">
+                    </div>
+                </div>
+
+                <!-- Execution Strategy -->
+                <h2>실행 전략</h2>
+                <div class="form-group">
+                    <label for="execution_plan">실행 계획</label>
+                    <textarea id="execution_plan" class="textarea-large" placeholder="단계별 실행 전략과 마일스톤"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="marketing_strategy">마케팅 전략</label>
+                    <textarea id="marketing_strategy" placeholder="고객 획득 및 마케팅 방법"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="key_risks">주요 리스크</label>
+                    <textarea id="key_risks" placeholder="예상되는 위험 요소들"></textarea>
+                </div>
+
+                <!-- Additional Information -->
+                <h2>추가 정보</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="keywords">키워드 (쉼표로 구분)</label>
+                        <input type="text" id="keywords" placeholder="AI, 자동화, SaaS">
+                    </div>
+                    <div class="form-group">
+                        <label for="trend_growth">트렌드 성장률</label>
+                        <input type="text" id="trend_growth" placeholder="예: +150%">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="why_now">지금이 기회인 이유</label>
+                    <textarea id="why_now" placeholder="왜 지금이 이 아이디어를 실행할 적절한 시기인가?"></textarea>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" id="submit-btn">아이디어 추가</button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">초기화</button>
+                </div>
+            </form>
+
+            <!-- Existing Ideas List -->
+            <div class="ideas-list">
+                <h2>기존 아이디어 관리</h2>
+                <div id="ideas-container">
+                    <!-- Ideas will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple admin authentication
+        const ADMIN_PASSWORD = 'ideaoasis2025';
+        let currentIdeas = [];
+        let editingIndex = -1;
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('login-panel').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadIdeas();
+            } else {
+                showAlert('잘못된 비밀번호입니다.', 'error');
+            }
+        });
+
+        function logout() {
+            document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        async function loadIdeas() {
+            try {
+                const response = await fetch('ideas.json');
+                currentIdeas = await response.json();
+                displayIdeasList();
+            } catch (error) {
+                console.error('아이디어를 불러오는데 실패했습니다:', error);
+                currentIdeas = [];
+                displayIdeasList();
+            }
+        }
+
+        function displayIdeasList() {
+            const container = document.getElementById('ideas-container');
+            container.innerHTML = currentIdeas.map((idea, index) => `
+                <div class="idea-item">
+                    <div class="idea-info">
+                        <h3>${idea.idea}</h3>
+                        <p>${idea.desc}</p>
+                        <small>출처: ${idea.source} | 시장규모: ${idea.size}</small>
+                    </div>
+                    <div class="idea-actions">
+                        <button onclick="editIdea(${index})">수정</button>
+                        <button class="btn-danger" onclick="deleteIdea(${index})">삭제</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editIdea(index) {
+            const idea = currentIdeas[index];
+            editingIndex = index;
+            
+            // Fill form with existing data
+            document.getElementById('idea').value = idea.idea || '';
+            document.getElementById('desc').value = idea.desc || '';
+            document.getElementById('detailed_desc').value = idea.detailed_desc || '';
+            document.getElementById('source').value = idea.source || '';
+            document.getElementById('size').value = idea.size || '';
+            document.getElementById('comp').value = idea.comp || '';
+            document.getElementById('diff').value = idea.diff || '';
+            document.getElementById('fit').value = idea.fit || '';
+            document.getElementById('category').value = idea.category || '';
+            document.getElementById('target_market').value = idea.target_market || '';
+            document.getElementById('opportunity').value = idea.opportunity || '';
+            document.getElementById('timing').value = idea.timing || '';
+            document.getElementById('revenue_model').value = idea.revenue_model || '';
+            document.getElementById('initial_investment').value = idea.initial_investment || '';
+            document.getElementById('revenue_potential').value = idea.revenue_potential || '';
+            document.getElementById('execution_plan').value = idea.execution_plan || '';
+            document.getElementById('marketing_strategy').value = idea.marketing_strategy || '';
+            document.getElementById('key_risks').value = idea.key_risks || '';
+            document.getElementById('keywords').value = idea.keywords || '';
+            document.getElementById('trend_growth').value = idea.trend_growth || '';
+            document.getElementById('why_now').value = idea.why_now || '';
+            
+            document.getElementById('submit-btn').textContent = '아이디어 수정';
+            
+            // Scroll to form
+            document.getElementById('idea-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteIdea(index) {
+            if (confirm('정말로 이 아이디어를 삭제하시겠습니까?')) {
+                currentIdeas.splice(index, 1);
+                saveIdeas();
+                displayIdeasList();
+                showAlert('아이디어가 삭제되었습니다.', 'success');
+            }
+        }
+
+        document.getElementById('idea-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newIdea = {
+                idea: document.getElementById('idea').value,
+                desc: document.getElementById('desc').value,
+                detailed_desc: document.getElementById('detailed_desc').value,
+                source: document.getElementById('source').value,
+                size: document.getElementById('size').value,
+                comp: parseInt(document.getElementById('comp').value),
+                diff: parseInt(document.getElementById('diff').value),
+                fit: document.getElementById('fit').value,
+                category: document.getElementById('category').value,
+                target_market: document.getElementById('target_market').value,
+                opportunity: parseInt(document.getElementById('opportunity').value) || null,
+                timing: parseInt(document.getElementById('timing').value) || null,
+                revenue_model: document.getElementById('revenue_model').value,
+                initial_investment: document.getElementById('initial_investment').value,
+                revenue_potential: document.getElementById('revenue_potential').value,
+                execution_plan: document.getElementById('execution_plan').value,
+                marketing_strategy: document.getElementById('marketing_strategy').value,
+                key_risks: document.getElementById('key_risks').value,
+                keywords: document.getElementById('keywords').value,
+                trend_growth: document.getElementById('trend_growth').value,
+                why_now: document.getElementById('why_now').value,
+                created_at: new Date().toISOString()
+            };
+            
+            if (editingIndex >= 0) {
+                currentIdeas[editingIndex] = newIdea;
+                showAlert('아이디어가 수정되었습니다.', 'success');
+                editingIndex = -1;
+                document.getElementById('submit-btn').textContent = '아이디어 추가';
+            } else {
+                currentIdeas.push(newIdea);
+                showAlert('새 아이디어가 추가되었습니다.', 'success');
+            }
+            
+            saveIdeas();
+            displayIdeasList();
+            resetForm();
+        });
+
+        function resetForm() {
+            document.getElementById('idea-form').reset();
+            editingIndex = -1;
+            document.getElementById('submit-btn').textContent = '아이디어 추가';
+        }
+
+        function saveIdeas() {
+            // In a real application, this would save to a backend
+            // For now, we'll show the JSON data that should be saved
+            console.log('아이디어 데이터 (ideas.json에 저장해야 함):', JSON.stringify(currentIdeas, null, 2));
+            
+            // Create downloadable JSON file
+            const blob = new Blob([JSON.stringify(currentIdeas, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ideas.json';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                container.removeChild(alert);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

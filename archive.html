@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디어 아카이브 - Ideaoasis.co.kr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            background: white;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 25px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: #495057;
+            transform: translateY(-2px);
+        }
+
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .idea-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+            border: 1px solid rgba(0, 123, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .idea-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 123, 255, 0.15);
+        }
+
+        .idea-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .idea-desc {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .idea-meta {
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #007bff;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-section {
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            margin-bottom: 15px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .progress-text {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .progress-value {
+            font-weight: 700;
+            color: #007bff;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .fit-section {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #007bff;
+        }
+
+        .fit-label {
+            font-size: 0.8rem;
+            color: #0056b3;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fit-text {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .results-count {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .ideas-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .idea-card {
+                padding: 20px;
+            }
+
+            .idea-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="nav-link">← 홈으로 돌아가기</a>
+            <a href="admin.html" class="nav-link" style="background: #6c757d;">⚙️ 관리자 패널</a>
+            <h1>아이디어 아카이브</h1>
+            
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="search-input" 
+                    placeholder="아이디어 제목이나 설명으로 검색..."
+                >
+                <span class="search-icon">🔍</span>
+            </div>
+        </header>
+
+        <div id="loading" class="loading">
+            아이디어를 불러오는 중...
+        </div>
+
+        <div id="results-count" class="results-count" style="display: none;"></div>
+
+        <div id="ideas-container" class="ideas-grid" style="display: none;">
+            <!-- All ideas will be displayed here -->
+        </div>
+
+        <div id="no-results" class="no-results" style="display: none;">
+            검색 결과가 없습니다. 다른 키워드로 검색해 보세요.
+        </div>
+    </div>
+
+    <script>
+        let allIdeas = [];
+        let filteredIdeas = [];
+
+        async function loadIdeas() {
+            try {
+                const response = await fetch('ideas.json');
+                allIdeas = await response.json();
+                filteredIdeas = [...allIdeas];
+                
+                displayIdeas(filteredIdeas);
+                updateResultsCount(filteredIdeas.length);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('ideas-container').style.display = 'grid';
+                document.getElementById('results-count').style.display = 'block';
+                
+            } catch (error) {
+                console.error('아이디어를 불러오는데 실패했습니다:', error);
+                document.getElementById('loading').innerHTML = '아이디어를 불러오는데 실패했습니다. 잠시 후 다시 시도해 주세요.';
+            }
+        }
+
+        function displayIdeas(ideas) {
+            const container = document.getElementById('ideas-container');
+            
+            if (ideas.length === 0) {
+                container.style.display = 'none';
+                document.getElementById('no-results').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('no-results').style.display = 'none';
+            container.style.display = 'grid';
+            
+            container.innerHTML = ideas.map(idea => `
+                <div class="idea-card">
+                    <h2 class="idea-title">${idea.idea}</h2>
+                    <p class="idea-desc">${idea.desc}</p>
+                    
+                    <div class="idea-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">출처</div>
+                            <div class="meta-value">${idea.source}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">시장 규모</div>
+                            <div class="meta-value">${idea.size}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span class="progress-text">경쟁 강도</span>
+                                <span class="progress-value">${idea.comp}/10</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${idea.comp * 10}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span class="progress-text">구현 난이도</span>
+                                <span class="progress-value">${idea.diff}/10</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${idea.diff * 10}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fit-section">
+                        <div class="fit-label">한국 시장 적합성</div>
+                        <div class="fit-text">${idea.fit}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateResultsCount(count) {
+            const countElement = document.getElementById('results-count');
+            countElement.textContent = `총 ${count}개의 아이디어`;
+        }
+
+        function filterIdeas(searchTerm) {
+            const term = searchTerm.toLowerCase().trim();
+            
+            if (term === '') {
+                filteredIdeas = [...allIdeas];
+            } else {
+                filteredIdeas = allIdeas.filter(idea => 
+                    idea.idea.toLowerCase().includes(term) || 
+                    idea.desc.toLowerCase().includes(term)
+                );
+            }
+            
+            displayIdeas(filteredIdeas);
+            updateResultsCount(filteredIdeas.length);
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            filterIdeas(e.target.value);
+        });
+
+        // Load ideas when page loads
+        document.addEventListener('DOMContentLoaded', loadIdeas);
+    </script>
+</body>
+</html>
