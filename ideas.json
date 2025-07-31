@@ -1,0 +1,47 @@
+[
+  {
+    "idea": "camelAI Embedded",
+    "desc": "SaaS AI chat for SQL/dashboards",
+    "source": "Product Hunt (July 26 2025)",
+    "size": "₩10.5T",
+    "comp": 6,
+    "diff": 5,
+    "fit": "High net penetration/AI funding"
+  },
+  {
+    "idea": "Tough Tongue AI",
+    "desc": "Role-play for conversations",
+    "source": "Product Hunt (July 25 2025)",
+    "size": "₩2.1T",
+    "comp": 4,
+    "diff": 6,
+    "fit": "Hierarchy culture suits training"
+  },
+  {
+    "idea": "Perplexity Comet",
+    "desc": "AI browser/search",
+    "source": "Trends.vc",
+    "size": "₩10T",
+    "comp": 8,
+    "diff": 8,
+    "fit": "High bandwidth, Naver dominates"
+  },
+  {
+    "idea": "Refundy",
+    "desc": "Refund automation",
+    "source": "The SaaS News (July 29 2025)",
+    "size": "₩40T",
+    "comp": 5,
+    "diff": 5,
+    "fit": "E-com boom w/Coupang"
+  },
+  {
+    "idea": "K-beauty Brand",
+    "desc": "Influencer marketing",
+    "source": "Korea JoongAng Daily (July 24 2025)",
+    "size": "₩13T",
+    "comp": 9,
+    "diff": 7,
+    "fit": "Social/e-com heavy"
+  }
+]
